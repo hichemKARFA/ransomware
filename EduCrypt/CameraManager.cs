@@ -11,8 +11,8 @@ namespace ConsoleApplication1
     private static CameraManager instance;
     private VideoCaptureDevice videoSource;
     private VideoFileWriter videoWriter;
-    private bool isRecording = false;
-    private bool isInitialized = false;
+    private bool isRecording;
+    private bool isInitialized;
 
 
     // Constructeur privé pour empêcher l'instanciation directe

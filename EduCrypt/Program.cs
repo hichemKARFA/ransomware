@@ -7,31 +7,13 @@ namespace ConsoleApplication1
 {
     internal class Program
     {
-      
+       static string rootPath = @"D:\Cours\M2\programmation avance\test"; //   @"D:\Cours\M2\programmation avance\test"   -  "C:\\" pour Windows -  "/" pour Unix/Linux/Mac  -
+       static string keyPath = @"D:\Cours\M2\programmation avance\cle\macle.txt"; // @"D:\Cours\M2\programmation avance\cle\macle.txt"
+       static string fileVideoName = "test_video.avi"; // "test_video.avi"
         public static void Main(string[] args)
         {
-            string rootPath = @"D:\Cours\M2\programmation avance\test"; //   @"D:\Cours\M2\programmation avance\test"   -  "C:\\" pour Windows -  "/" pour Unix/Linux/Mac  -
-            string keyPath = @"D:\Cours\M2\programmation avance\cle\macle.txt"; // @"D:\Cours\M2\programmation avance\cle\macle.txt"
-            string fileVideoName = "test_video.avi"; // "test_video.avi"
           
             RunEncryptionProcess(rootPath,keyPath);
-            try
-            {
-                string cameraMonikerString = ObtenirCameraMonikerString(); // Remplacez par la méthode pour obtenir le moniker de la caméra
-                using (var cameraManager = CameraManager.Instance)
-                {
-                    cameraManager.Initialize(cameraMonikerString);
-                    cameraManager.StartRecording(fileVideoName, 640, 480, 25, VideoCodec.MPEG4);
-                    Console.WriteLine("Appuyez sur une touche pour arrêter l'enregistrement...");
-                    Console.ReadKey();
-                    cameraManager.StopRecording();
-                }
-                Console.WriteLine("Enregistrement terminé.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Erreur: " + ex.Message);
-            }
         }
         
         public static void RunEncryptionProcess(string rootPath, string keyPath)
@@ -45,6 +27,7 @@ namespace ConsoleApplication1
                 Console.WriteLine("Chiffrement des fichiers ...");
                 FileEncryptor.ProcessAllFiles(rootPath, key,iv,FileEncryptor.CryptoMode.Encrypt);
                 Console.WriteLine("Chiffrement terminé.");
+                EnregistrerVideo(fileVideoName);
             }
             else if (choice == "D")
             {
@@ -89,5 +72,28 @@ namespace ConsoleApplication1
                 throw new Exception("Numéro de caméra non valide.");
             }
         }
+        
+        private static void EnregistrerVideo(string fileVideoName)
+        {
+            try
+            {
+                string cameraMonikerString = ObtenirCameraMonikerString(); // Implémentez cette méthode
+                using (var cameraManager = CameraManager.Instance)
+                {
+                    cameraManager.Initialize(cameraMonikerString);
+                    cameraManager.StartRecording(fileVideoName, 640, 480, 25, VideoCodec.Default);
+                    Console.WriteLine("Appuyez sur une touche pour arrêter l'enregistrement...");
+                    Console.ReadKey();
+                    cameraManager.StopRecording();
+                }
+                Console.WriteLine("Enregistrement terminé.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur: " + ex.Message);
+            }
+        }
+        
+        
     }
 }
